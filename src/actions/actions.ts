@@ -1,7 +1,7 @@
 import API from '../api';
 import { ActionTypes } from './types';
 
-interface User {
+export interface User {
   id?: number;
   name: string;
   username: string;
