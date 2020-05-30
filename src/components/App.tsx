@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
 import { User, StoreInterface } from '../reducer';
-import { fetchUsers } from '../actions';
+import { handleFetchUsers, handleDeleteUser } from '../actions';
 
 interface MapStateToPropsType {
   users: User[];
@@ -10,26 +10,29 @@ interface MapStateToPropsType {
 }
 
 interface MapDispatchToPropsType {
-  fetchUsers: typeof fetchUsers;
+  handleFetchUsers: typeof handleFetchUsers;
+  handleDeleteUser: typeof handleDeleteUser;
 }
 
 type AppProps = MapStateToPropsType & MapDispatchToPropsType;
 
 const _App: React.FC<AppProps> = (props: AppProps): JSX.Element => {
-  const { users, loaderStatus, fetchUsers } = props;
+  const { users, loaderStatus, handleFetchUsers, handleDeleteUser } = props;
 
   React.useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
+    handleFetchUsers();
+  }, [handleFetchUsers]);
+
+  const usersElement = users.map((user: User) => (
+    <div key={user.id} onClick={() => user.id && handleDeleteUser(user.id)}>
+      {user.name}
+    </div>
+  ));
 
   return (
     <div>
-      <div onClick={() => console.log(props)}>LogProps</div>
-      {loaderStatus === 'pending' ? (
-        <div>Loading</div>
-      ) : (
-        users.map((user: any) => <div key={user.id}>{user.name}</div>)
-      )}
+      <h1>Users:</h1>
+      {loaderStatus === 'pending' ? <div>Loading</div> : usersElement}
     </div>
   );
 };
@@ -44,6 +47,6 @@ const mapStateToProps = ({
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType =>
-  bindActionCreators({ fetchUsers }, dispatch);
+  bindActionCreators({ handleFetchUsers, handleDeleteUser }, dispatch);
 
 export const App = connect(mapStateToProps, mapDispatchToProps)(_App);

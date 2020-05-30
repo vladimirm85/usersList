@@ -32,18 +32,24 @@ export const reducer = (
   action: Action
 ): StateInterface => {
   switch (action.type) {
-    case ActionTypes.requestFetchUsers:
+    case ActionTypes.requestApi:
       return {
         ...state,
         loaderStatus: 'pending',
       };
-    case ActionTypes.requestFetchUsersSuccess:
+    case ActionTypes.fetchUsers:
       return {
         ...state,
         users: action.payload.users,
         loaderStatus: 'ready',
       };
-    case ActionTypes.requestFetchUsersFailed:
+    case ActionTypes.deleteUser:
+      return {
+        ...state,
+        users: state.users.filter((user) => user.id !== action.payload.id),
+        loaderStatus: 'ready',
+      };
+    case ActionTypes.requestFailed:
       return {
         ...state,
         loaderStatus: 'ready',

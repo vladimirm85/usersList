@@ -1,17 +1,12 @@
-import {
-  RequestFetchUsers,
-  RequestFetchUsersFailed,
-  RequestFetchUsersSuccess,
-} from './actions';
+import { RequestApi, RequestFailed, FetchUsers, DeleteUser } from './actions';
 
 export enum ActionTypes {
+  requestApi = 'REQUEST_API',
+  requestFailed = 'REQUEST_FAILD',
   fetchUsers = 'FETCH_USERS',
-  requestFetchUsers = 'REQUEST_FETCH_USERS',
-  requestFetchUsersSuccess = 'REQUEST_FETCH_USERS_SUCCESS',
-  requestFetchUsersFailed = 'REQUEST_FETCH_USERS_FAILD',
+  handleFetchUsers = 'HANDLE_FETCH_USERS',
+  deleteUser = 'DELETE_USER',
+  handleDeleteUser = 'HANDLE_DELETE_USER',
 }
 
-export type Action =
-  | RequestFetchUsers
-  | RequestFetchUsersSuccess
-  | RequestFetchUsersFailed;
+export type Action = RequestApi | FetchUsers | RequestFailed | DeleteUser;
