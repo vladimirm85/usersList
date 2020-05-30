@@ -2,11 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { reducer } from './reducer/reducer';
-import { middleware } from './middleware/middleware';
-import App from './App';
+import { reducer } from './reducer';
+import { middleware, sagaMiddleware } from './middleware';
+import { watchFetchUsers } from './actions';
+import App from './components/App';
 
 const store = createStore(reducer, middleware);
+sagaMiddleware.run(watchFetchUsers);
 
 ReactDOM.render(
   <React.StrictMode>
