@@ -1,52 +1,20 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Dispatch, bindActionCreators } from 'redux';
-import { User, StoreInterface } from '../reducer';
-import { handleFetchUsers, handleDeleteUser } from '../actions';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { routesProperties } from '../routes';
 
-interface MapStateToPropsType {
-  users: User[];
-  loaderStatus: string;
-}
+const routesComponents = routesProperties.map((route) => (
+  <Route
+    path={route.url}
+    component={route.component}
+    exact={route.exact}
+    key={route.url}
+  />
+));
 
-interface MapDispatchToPropsType {
-  handleFetchUsers: typeof handleFetchUsers;
-  handleDeleteUser: typeof handleDeleteUser;
-}
-
-type AppProps = MapStateToPropsType & MapDispatchToPropsType;
-
-const _App: React.FC<AppProps> = (props: AppProps): JSX.Element => {
-  const { users, loaderStatus, handleFetchUsers, handleDeleteUser } = props;
-
-  React.useEffect(() => {
-    handleFetchUsers();
-  }, [handleFetchUsers]);
-
-  const usersElement = users.map((user: User) => (
-    <div key={user.id} onClick={() => user.id && handleDeleteUser(user.id)}>
-      {user.name}
-    </div>
-  ));
-
+export const App = (): JSX.Element => {
   return (
-    <div>
-      <h1>Users:</h1>
-      {loaderStatus === 'pending' ? <div>Loading</div> : usersElement}
-    </div>
+    <Router>
+      <Switch>{routesComponents}</Switch>
+    </Router>
   );
 };
-
-const mapStateToProps = ({
-  usersReducer,
-}: StoreInterface): MapStateToPropsType => {
-  return {
-    users: usersReducer.users,
-    loaderStatus: usersReducer.loaderStatus,
-  };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType =>
-  bindActionCreators({ handleFetchUsers, handleDeleteUser }, dispatch);
-
-export const App = connect(mapStateToProps, mapDispatchToProps)(_App);
