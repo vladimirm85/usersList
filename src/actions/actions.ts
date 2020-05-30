@@ -1,47 +1,38 @@
-import API from '../api';
 import { ActionTypes } from './types';
-import { put, takeEvery, call } from 'redux-saga/effects';
 import { User } from '../reducer';
 
-interface FetchUsersActionInterface {
-  type: ActionTypes.fetchUsers;
+export interface RequestFetchUsers {
+  type: ActionTypes.requestFetchUsers;
+}
+
+export const requestFetchUsers = (): RequestFetchUsers => ({
+  type: ActionTypes.requestFetchUsers,
+});
+
+export interface RequestFetchUsersSuccess {
+  type: ActionTypes.requestFetchUsersSuccess;
   payload: {
     users: User[];
   };
 }
 
-const requestFetchUsers = () => ({
-  type: ActionTypes.requestFetchUsers,
-  payload: {},
-});
-
-const requestFetchUsersSuccess = (users: User[]) => ({
+export const requestFetchUsersSuccess = (
+  users: User[]
+): RequestFetchUsersSuccess => ({
   type: ActionTypes.requestFetchUsersSuccess,
   payload: {
     users,
   },
 });
 
-const requestFetchUsersFailed = () => ({
-  type: ActionTypes.requestFetchUsersSuccess,
-  payload: {},
+export interface RequestFetchUsersFailed {
+  type: ActionTypes.requestFetchUsersFailed;
+}
+
+export const requestFetchUsersFailed = (): RequestFetchUsersFailed => ({
+  type: ActionTypes.requestFetchUsersFailed,
 });
 
 export const fetchUsers = () => ({
   type: ActionTypes.fetchUsers,
 });
-
-export function* watchFetchUsers() {
-  yield takeEvery(ActionTypes.fetchUsers, fetchUserAsync);
-}
-
-export function* fetchUserAsync() {
-  try {
-    yield put(requestFetchUsers());
-    const users = yield call(() => API.get('').then((user) => user.data));
-    yield put(requestFetchUsersSuccess(users));
-  } catch (error) {
-    console.log(error);
-    yield put(requestFetchUsersFailed());
-  }
-}

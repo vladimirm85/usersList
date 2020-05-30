@@ -1,4 +1,4 @@
-import { ActionTypes } from '../actions';
+import { ActionTypes, Action } from '../actions';
 
 export interface User {
   id?: number;
@@ -27,12 +27,26 @@ interface StateInterface {
 
 const initialState: StateInterface = { users: [], loaderStatus: 'init' };
 
-export const reducer = (state = initialState, action: any): StateInterface => {
+export const reducer = (
+  state = initialState,
+  action: Action
+): StateInterface => {
   switch (action.type) {
+    case ActionTypes.requestFetchUsers:
+      return {
+        ...state,
+        loaderStatus: 'pending',
+      };
     case ActionTypes.requestFetchUsersSuccess:
       return {
         ...state,
         users: action.payload.users,
+        loaderStatus: 'ready',
+      };
+    case ActionTypes.requestFetchUsersFailed:
+      return {
+        ...state,
+        loaderStatus: 'ready',
       };
     default:
       return state;
