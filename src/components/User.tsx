@@ -21,14 +21,14 @@ type UserProps = MapStateToPropsType &
 const _User: React.FC<UserProps> = (props: UserProps): JSX.Element => {
   const { users, loaderStatus, handleDeleteUser, match } = props;
   const userId = parseInt(match.url.slice(1));
-  const [user, setUser] = React.useState({ name: '' });
+  const [user, setUser] = React.useState<UserInterface | undefined>(undefined);
 
   React.useEffect(() => {
     const userIndex = users.findIndex((user) => user.id === userId);
     userIndex === -1 ? console.log('fetchUser') : setUser(users[userIndex]);
   }, [userId, users]);
 
-  return <div>{user.name}</div>;
+  return <div>{!user ? <div>404</div> : <div>{user.name}</div>}</div>;
 };
 
 const mapStateToProps = ({

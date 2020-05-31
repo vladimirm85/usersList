@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 import { User, StoreInterface } from '../reducer';
-import { handleFetchUsers, handleDeleteUser } from '../actions';
+import { handleDeleteUser } from '../actions';
+import { UsersTable } from './UsersTable';
 
 interface MapStateToPropsType {
   users: User[];
@@ -11,21 +12,15 @@ interface MapStateToPropsType {
 }
 
 interface MapDispatchToPropsType {
-  handleFetchUsers: typeof handleFetchUsers;
   handleDeleteUser: typeof handleDeleteUser;
 }
 
 type HomeProps = MapStateToPropsType & MapDispatchToPropsType;
 
 const _Home: React.FC<HomeProps> = (props: HomeProps): JSX.Element => {
-  const { users, loaderStatus, handleFetchUsers, handleDeleteUser } = props;
-
-  React.useEffect(() => {
-    handleFetchUsers();
-  }, [handleFetchUsers]);
-
+  const { users, loaderStatus, handleDeleteUser } = props;
   const usersElement = users.map((user: User) => (
-    <div key={user.id} onClick={() => user.id && handleDeleteUser(user.id)}>
+    <div key={user.id}>
       <Link to={`/${user.id}`}>{user.name}</Link>
     </div>
   ));
@@ -33,7 +28,11 @@ const _Home: React.FC<HomeProps> = (props: HomeProps): JSX.Element => {
   return (
     <div>
       <h1>Users:</h1>
-      {loaderStatus === 'pending' ? <div>Loading</div> : usersElement}
+      {loaderStatus === 'pending' ? (
+        <div>Loading</div>
+      ) : (
+        <UsersTable users={users} />
+      )}
     </div>
   );
 };
@@ -48,6 +47,6 @@ const mapStateToProps = ({
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType =>
-  bindActionCreators({ handleFetchUsers, handleDeleteUser }, dispatch);
+  bindActionCreators({ handleDeleteUser }, dispatch);
 
 export const Home = connect(mapStateToProps, mapDispatchToProps)(_Home);
