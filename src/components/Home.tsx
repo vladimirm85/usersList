@@ -1,14 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
-import { Link } from 'react-router-dom';
+import { Modal } from '@material-ui/core';
 import { User, StoreInterface } from '../reducer';
 import { handleDeleteUser } from '../actions';
 import { UsersTable } from './UsersTable';
 
+{
+  /* <UsersTable users={users} handleDeleteUser={handleDeleteUser} /> */
+}
+
 interface MapStateToPropsType {
   users: User[];
-  loaderStatus: string;
 }
 
 interface MapDispatchToPropsType {
@@ -18,21 +21,11 @@ interface MapDispatchToPropsType {
 type HomeProps = MapStateToPropsType & MapDispatchToPropsType;
 
 const _Home: React.FC<HomeProps> = (props: HomeProps): JSX.Element => {
-  const { users, loaderStatus, handleDeleteUser } = props;
-  const usersElement = users.map((user: User) => (
-    <div key={user.id}>
-      <Link to={`/${user.id}`}>{user.name}</Link>
-    </div>
-  ));
-
+  const { users } = props;
   return (
     <div>
       <h1>Users:</h1>
-      {loaderStatus === 'pending' ? (
-        <div>Loading</div>
-      ) : (
-        <UsersTable users={users} />
-      )}
+      <UsersTable users={users} handleDeleteUser={handleDeleteUser} />
     </div>
   );
 };
@@ -42,7 +35,6 @@ const mapStateToProps = ({
 }: StoreInterface): MapStateToPropsType => {
   return {
     users: usersReducer.users,
-    loaderStatus: usersReducer.loaderStatus,
   };
 };
 

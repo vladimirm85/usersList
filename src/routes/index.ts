@@ -1,6 +1,7 @@
 import { Home } from '../components/Home';
 import { P404 } from '../components/404';
 import { User } from '../components/User';
+import { UseDataHandling } from '../components/Userrrrrr';
 
 export const routesProperties = [
   {
@@ -13,6 +14,12 @@ export const routesProperties = [
     name: 'user',
     url: '/:id',
     component: User,
+    exact: true,
+  },
+  {
+    name: 'user',
+    url: '/:id/update',
+    component: UseDataHandling,
     exact: true,
   },
   {

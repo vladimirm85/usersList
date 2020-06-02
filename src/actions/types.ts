@@ -1,4 +1,10 @@
-import { RequestApi, RequestFailed, FetchUsers, DeleteUser } from './actions';
+import {
+  RequestApi,
+  RequestFailed,
+  FetchUsers,
+  DeleteUser,
+  UpdateUser,
+} from './actions';
 
 export enum ActionTypes {
   requestApi = 'REQUEST_API',
@@ -7,6 +13,13 @@ export enum ActionTypes {
   handleFetchUsers = 'HANDLE_FETCH_USERS',
   deleteUser = 'DELETE_USER',
   handleDeleteUser = 'HANDLE_DELETE_USER',
+  updateUser = 'UPDATE_USER',
+  handleUpdateUser = 'HANDLE_UPDATE_USER',
 }
 
-export type Action = RequestApi | FetchUsers | RequestFailed | DeleteUser;
+export type Action =
+  | RequestApi
+  | FetchUsers
+  | RequestFailed
+  | DeleteUser
+  | UpdateUser;

@@ -22,10 +22,10 @@ export interface User {
 
 interface StateInterface {
   users: User[];
-  loaderStatus: string;
+  isLoading: boolean;
 }
 
-const initialState: StateInterface = { users: [], loaderStatus: 'init' };
+const initialState: StateInterface = { users: [], isLoading: true };
 
 export const reducer = (
   state = initialState,
@@ -35,24 +35,34 @@ export const reducer = (
     case ActionTypes.requestApi:
       return {
         ...state,
-        loaderStatus: 'pending',
+        isLoading: true,
       };
     case ActionTypes.fetchUsers:
       return {
         ...state,
         users: action.payload.users,
-        loaderStatus: 'ready',
+        isLoading: false,
+      };
+    case ActionTypes.updateUser:
+      return {
+        ...state,
+        users: state.users.map((user) =>
+          user.id !== action.payload.user.id
+            ? { ...user }
+            : { ...action.payload.user }
+        ),
+        isLoading: false,
       };
     case ActionTypes.deleteUser:
       return {
         ...state,
         users: state.users.filter((user) => user.id !== action.payload.id),
-        loaderStatus: 'ready',
+        isLoading: false,
       };
     case ActionTypes.requestFailed:
       return {
         ...state,
-        loaderStatus: 'ready',
+        isLoading: false,
       };
     default:
       return state;

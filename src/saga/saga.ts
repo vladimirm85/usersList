@@ -11,6 +11,8 @@ import {
   FetchUsers,
   deleteUser,
   DeleteUser,
+  updateUser,
+  UpdateUser,
 } from '../actions';
 
 export function* watchFetchUsers() {
@@ -46,6 +48,22 @@ export function* deleteUserAsync(action: DeleteUser) {
   }
 }
 
+export function* watchUpdateUser() {
+  yield takeEvery(ActionTypes.handleUpdateUser, updateUserAsync);
+}
+
+export function* updateUserAsync(action: UpdateUser) {
+  const user = action.payload.user;
+  try {
+    yield put<RequestApi>(requestApi());
+    yield call(() => API.put(`/${user.id}`, user));
+    yield put<UpdateUser>(updateUser(user));
+  } catch (error) {
+    console.log(error);
+    yield put<RequestFailed>(requestFailed());
+  }
+}
+
 export function* rootSaga() {
-  yield all([watchFetchUsers(), watchDeleteUser()]);
+  yield all([watchFetchUsers(), watchDeleteUser(), watchUpdateUser()]);
 }

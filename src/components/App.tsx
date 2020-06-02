@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import { routesProperties } from '../routes';
 import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
-import { Grid } from '@material-ui/core';
+import { Grid, Backdrop, CircularProgress } from '@material-ui/core';
 import { Header } from './Header';
 import { User, StoreInterface } from '../reducer';
 import { handleFetchUsers } from '../actions';
@@ -19,6 +19,7 @@ const routesComponents = routesProperties.map((route) => (
 
 interface MapStateToPropsType {
   users: User[];
+  isLoading: boolean;
 }
 
 interface MapDispatchToPropsType {
@@ -28,7 +29,7 @@ interface MapDispatchToPropsType {
 type AppProps = MapStateToPropsType & MapDispatchToPropsType;
 
 const _App: React.FC<AppProps> = (props: AppProps): JSX.Element => {
-  const { users, handleFetchUsers } = props;
+  const { users, isLoading, handleFetchUsers } = props;
   React.useEffect(() => {
     if (!users.length) {
       handleFetchUsers();
@@ -41,11 +42,14 @@ const _App: React.FC<AppProps> = (props: AppProps): JSX.Element => {
           <Header />
         </Grid>
         <Grid item container>
-          <Grid item xs={false} sm={2} />
-          <Grid item xs={12} sm={8}>
-            <Switch>{routesComponents}</Switch>
+          <Grid item xs={false} sm={1} />
+          <Grid item xs={12} sm={10}>
+            <Backdrop open={isLoading}>
+              <CircularProgress />
+            </Backdrop>
+            <Switch>{!isLoading && routesComponents}</Switch>
           </Grid>
-          <Grid item xs={false} sm={2} />
+          <Grid item xs={false} sm={1} />
         </Grid>
       </Grid>
     </Router>
@@ -57,6 +61,7 @@ const mapStateToProps = ({
 }: StoreInterface): MapStateToPropsType => {
   return {
     users: usersReducer.users,
+    isLoading: usersReducer.isLoading,
   };
 };
 

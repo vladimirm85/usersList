@@ -49,9 +49,24 @@ export const deleteUser = (id: number): DeleteUser => ({
   },
 });
 
-export const handleDeleteUser = (id: number) => ({
+export const handleDeleteUser = () => ({
   type: ActionTypes.handleDeleteUser,
+});
+
+export interface UpdateUser {
+  type: ActionTypes.updateUser;
   payload: {
-    id,
+    user: User;
+  };
+}
+
+export const updateUser = (user: User): UpdateUser => ({
+  type: ActionTypes.updateUser,
+  payload: {
+    user,
   },
+});
+
+export const handleUpdateUser = () => ({
+  type: ActionTypes.handleUpdateUser,
 });

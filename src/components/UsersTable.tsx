@@ -1,6 +1,8 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { User } from '../reducer';
+import { handleDeleteUser } from '../actions';
 import {
   Table,
   TableBody,
@@ -10,26 +12,39 @@ import {
   TableRow,
   Paper,
 } from '@material-ui/core';
-import { Delete, Edit } from '@material-ui/icons';
-
-const spaceBetween = { display: 'flex', justifyContent: 'space-between' };
+import { Delete, Edit, Info } from '@material-ui/icons';
 
 const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
+  actionIcons: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  firstColumnWidth: {
+    width: '90px',
+  },
+  cursorPointer: {
+    cursor: 'pointer',
   },
 });
 
-export const UsersTable = (props: any) => {
-  const users: User[] = props.users;
+interface UsersTableProps {
+  users: User[];
+  handleDeleteUser: typeof handleDeleteUser;
+}
+
+export const UsersTable = (props: UsersTableProps) => {
+  const { users, handleDeleteUser } = props;
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="center">Action</TableCell>
+            <TableCell align="center" className={classes.firstColumnWidth}>
+              Action
+            </TableCell>
             <TableCell>Name</TableCell>
             <TableCell align="center">Username</TableCell>
             <TableCell align="center">Email</TableCell>
@@ -40,9 +55,16 @@ export const UsersTable = (props: any) => {
           {users.map((user) => (
             <TableRow key={`userId${user.id}`}>
               <TableCell>
-                <div style={spaceBetween}>
-                  <Delete />
-                  <Edit />
+                <div className={classes.actionIcons}>
+                  <Info
+                    className={classes.cursorPointer}
+                    onClick={() => history.push(`/${user.id}`)}
+                  />
+                  <Edit className={classes.cursorPointer} />
+                  <Delete
+                    className={classes.cursorPointer}
+                    onClick={() => user.id && handleDeleteUser()}
+                  />
                 </div>
               </TableCell>
               <TableCell>{user.name}</TableCell>
