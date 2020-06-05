@@ -35,6 +35,27 @@ export const handleFetchUsers = () => ({
   type: ActionTypes.handleFetchUsers,
 });
 
+export interface AddUser {
+  type: ActionTypes.addUser;
+  payload: {
+    user: User;
+  };
+}
+
+export const addUser = (user: User): AddUser => ({
+  type: ActionTypes.addUser,
+  payload: {
+    user,
+  },
+});
+
+export const handleAddUser = (user: User) => ({
+  type: ActionTypes.handleAddUser,
+  payload: {
+    user,
+  },
+});
+
 export interface DeleteUser {
   type: ActionTypes.deleteUser;
   payload: {
@@ -49,8 +70,11 @@ export const deleteUser = (id: number): DeleteUser => ({
   },
 });
 
-export const handleDeleteUser = () => ({
+export const handleDeleteUser = (id: number) => ({
   type: ActionTypes.handleDeleteUser,
+  payload: {
+    id,
+  },
 });
 
 export interface UpdateUser {
@@ -67,6 +91,9 @@ export const updateUser = (user: User): UpdateUser => ({
   },
 });
 
-export const handleUpdateUser = () => ({
+export const handleUpdateUser = (user: User) => ({
   type: ActionTypes.handleUpdateUser,
+  payload: {
+    user,
+  },
 });

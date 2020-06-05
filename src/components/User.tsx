@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Dispatch, bindActionCreators } from 'redux';
 import { makeStyles } from '@material-ui/core/styles';
+import { Delete, Edit } from '@material-ui/icons';
 import {
   Table,
   TableBody,
@@ -18,8 +19,11 @@ import { handleDeleteUser } from '../actions';
 
 const useStyles = makeStyles({
   table: {
-    width: '700px',
+    maxWidth: '700px',
     margin: 'auto',
+  },
+  cursorPointer: {
+    cursor: 'pointer',
   },
 });
 
@@ -36,20 +40,21 @@ type UserProps = MapStateToPropsType &
   RouteComponentProps;
 
 const _User: React.FC<UserProps> = (props: UserProps): JSX.Element => {
-  const { users, handleDeleteUser, match } = props;
-  const userId = parseInt(match.url.slice(1));
+  const { users, handleDeleteUser, match, history } = props;
   const [user, setUser] = React.useState<UserInterface | undefined>(undefined);
   const classes = useStyles();
 
   React.useEffect(() => {
+    console.log('UseruseEffect');
+    const userId = parseInt(match.url.slice(6));
     const user = users.find((user) => user.id === userId);
     user && setUser(user);
-  }, [userId, users]);
+  }, [users, match.url]);
 
   return (
     <div>
       {!user ? (
-        <div>404</div>
+        <div>400</div>
       ) : (
         <Container fixed>
           <TableContainer className={classes.table} component={Paper}>
@@ -57,11 +62,27 @@ const _User: React.FC<UserProps> = (props: UserProps): JSX.Element => {
               <TableHead>
                 <TableRow>
                   <TableCell align="center" colSpan={3}>
-                    User Details
+                    <h2>User Data</h2>
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
+                <TableRow key={'acyionButton'}>
+                  <TableCell colSpan={1}>
+                    <Edit
+                      className={classes.cursorPointer}
+                      onClick={() => {
+                        user.id && history.push(`/edit/${user.id}`);
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell align="right" colSpan={2}>
+                    <Delete
+                      className={classes.cursorPointer}
+                      onClick={() => user.id && handleDeleteUser(user.id)}
+                    />
+                  </TableCell>
+                </TableRow>
                 <TableRow key={'userName'}>
                   <TableCell>Name:</TableCell>
                   <TableCell align="right" colSpan={2}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import { routesProperties } from '../routes';
 import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
@@ -7,6 +7,10 @@ import { Grid, Backdrop, CircularProgress } from '@material-ui/core';
 import { Header } from './Header';
 import { User, StoreInterface } from '../reducer';
 import { handleFetchUsers } from '../actions';
+
+import { createBrowserHistory } from 'history';
+
+export const history = createBrowserHistory();
 
 const routesComponents = routesProperties.map((route) => (
   <Route
@@ -35,8 +39,9 @@ const _App: React.FC<AppProps> = (props: AppProps): JSX.Element => {
       handleFetchUsers();
     }
   }, [handleFetchUsers, users]);
+
   return (
-    <Router>
+    <Router history={history}>
       <Grid container direction="column">
         <Grid item>
           <Header />

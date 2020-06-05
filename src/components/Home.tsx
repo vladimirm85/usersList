@@ -1,14 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
-import { Modal } from '@material-ui/core';
 import { User, StoreInterface } from '../reducer';
 import { handleDeleteUser } from '../actions';
 import { UsersTable } from './UsersTable';
-
-{
-  /* <UsersTable users={users} handleDeleteUser={handleDeleteUser} /> */
-}
 
 interface MapStateToPropsType {
   users: User[];
@@ -21,7 +16,8 @@ interface MapDispatchToPropsType {
 type HomeProps = MapStateToPropsType & MapDispatchToPropsType;
 
 const _Home: React.FC<HomeProps> = (props: HomeProps): JSX.Element => {
-  const { users } = props;
+  const { users, handleDeleteUser } = props;
+
   return (
     <div>
       <h1>Users:</h1>

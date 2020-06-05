@@ -58,12 +58,17 @@ export const UsersTable = (props: UsersTableProps) => {
                 <div className={classes.actionIcons}>
                   <Info
                     className={classes.cursorPointer}
-                    onClick={() => history.push(`/${user.id}`)}
+                    onClick={() => history.push(`/user/${user.id}`)}
                   />
-                  <Edit className={classes.cursorPointer} />
+                  <Edit
+                    className={classes.cursorPointer}
+                    onClick={() => {
+                      user.id && history.push(`/edit/${user.id}`);
+                    }}
+                  />
                   <Delete
                     className={classes.cursorPointer}
-                    onClick={() => user.id && handleDeleteUser()}
+                    onClick={() => user.id && handleDeleteUser(user.id)}
                   />
                 </div>
               </TableCell>

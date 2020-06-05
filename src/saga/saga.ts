@@ -1,4 +1,5 @@
 import { put, takeEvery, call, all } from 'redux-saga/effects';
+import { history } from '../components/App';
 import API from '../api';
 import { User } from '../reducer';
 import {
@@ -9,6 +10,8 @@ import {
   RequestFailed,
   fetchUsers,
   FetchUsers,
+  addUser,
+  AddUser,
   deleteUser,
   DeleteUser,
   updateUser,
@@ -41,6 +44,7 @@ export function* deleteUserAsync(action: DeleteUser) {
   try {
     yield put<RequestApi>(requestApi());
     yield call(() => API.delete(`/${id}`));
+    history.push('/');
     yield put<DeleteUser>(deleteUser(id));
   } catch (error) {
     console.log(error);
@@ -56,8 +60,26 @@ export function* updateUserAsync(action: UpdateUser) {
   const user = action.payload.user;
   try {
     yield put<RequestApi>(requestApi());
-    yield call(() => API.put(`/${user.id}`, user));
-    yield put<UpdateUser>(updateUser(user));
+    const updatedUser = yield call(() => API.put(`/${user.id}`, user));
+    history.push(`/user/${user.id}`);
+    yield put<UpdateUser>(updateUser(updatedUser.data));
+  } catch (error) {
+    console.log(error);
+    yield put<RequestFailed>(requestFailed());
+  }
+}
+
+export function* watchAddUser() {
+  yield takeEvery(ActionTypes.handleAddUser, addUserAsync);
+}
+
+export function* addUserAsync(action: AddUser) {
+  const user = action.payload.user;
+  try {
+    yield put<RequestApi>(requestApi());
+    const addedUser = yield call(() => API.post('', user));
+    history.push('/');
+    yield put<AddUser>(addUser(addedUser.data));
   } catch (error) {
     console.log(error);
     yield put<RequestFailed>(requestFailed());
@@ -65,5 +87,10 @@ export function* updateUserAsync(action: UpdateUser) {
 }
 
 export function* rootSaga() {
-  yield all([watchFetchUsers(), watchDeleteUser(), watchUpdateUser()]);
+  yield all([
+    watchFetchUsers(),
+    watchAddUser(),
+    watchDeleteUser(),
+    watchUpdateUser(),
+  ]);
 }

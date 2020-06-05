@@ -10,6 +10,10 @@ export interface User {
     suite: string;
     city: string;
     zipcode: string;
+    geo: {
+      lat: string;
+      lng: string;
+    };
   };
   phone: string;
   website: string;
@@ -41,6 +45,12 @@ export const reducer = (
       return {
         ...state,
         users: action.payload.users,
+        isLoading: false,
+      };
+    case ActionTypes.addUser:
+      return {
+        ...state,
+        users: [...state.users, action.payload.user],
         isLoading: false,
       };
     case ActionTypes.updateUser:

@@ -1,25 +1,4 @@
-export interface UserData {
-  name: string;
-  username: string;
-  email: string;
-  address: {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: {
-      lat: string;
-      lng: string;
-    };
-  };
-  phone: string;
-  website: string;
-  company: {
-    name: string;
-    catchPhrase: string;
-    bs: string;
-  };
-}
+import { User } from '../reducer';
 
 interface ErrorInterface {
   name?: string;
@@ -44,7 +23,7 @@ interface ErrorInterface {
   };
 }
 
-export const userDataValidation = (values: UserData): ErrorInterface => {
+export const userDataValidation = (values: User): ErrorInterface => {
   const errors: any = {};
   if (!values.name) {
     errors.name = 'Required';

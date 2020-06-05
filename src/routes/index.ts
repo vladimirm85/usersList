@@ -1,7 +1,7 @@
 import { Home } from '../components/Home';
 import { P404 } from '../components/404';
 import { User } from '../components/User';
-import { UseDataHandling } from '../components/Userrrrrr';
+import { UserDataHandling } from '../components/UserDataHandling';
 
 export const routesProperties = [
   {
@@ -12,14 +12,20 @@ export const routesProperties = [
   },
   {
     name: 'user',
-    url: '/:id',
+    url: '/user/:id',
     component: User,
     exact: true,
   },
   {
-    name: 'user',
-    url: '/:id/update',
-    component: UseDataHandling,
+    name: 'userAdd',
+    url: '/add',
+    component: UserDataHandling,
+    exact: true,
+  },
+  {
+    name: 'userEdit',
+    url: '/edit/:id',
+    component: UserDataHandling,
     exact: true,
   },
   {
