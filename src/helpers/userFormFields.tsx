@@ -81,28 +81,6 @@ export const userFormFields: UserForm[] = [
     ),
   },
   {
-    size: 6,
-    field: (
-      <TextField
-        label="GEO lat"
-        name="address.geo.lat"
-        margin="none"
-        required={true}
-      />
-    ),
-  },
-  {
-    size: 6,
-    field: (
-      <TextField
-        label="GEO lng"
-        name="address.geo.lng"
-        margin="none"
-        required={true}
-      />
-    ),
-  },
-  {
     size: 12,
     field: (
       <TextField label="Phone" name="phone" margin="none" required={true} />
@@ -138,12 +116,6 @@ export const userFormFields: UserForm[] = [
         margin="none"
         required={true}
       />
-    ),
-  },
-  {
-    size: 12,
-    field: (
-      <TextField label="BS" name="company.bs" margin="none" required={true} />
     ),
   },
 ];

@@ -9,17 +9,12 @@ interface ErrorInterface {
     suite?: string;
     city?: string;
     zipcode?: string;
-    geo?: {
-      lat?: string;
-      lng?: string;
-    };
   };
   phone?: string;
   website?: string;
   company?: {
     name?: string;
     catchPhrase?: string;
-    bs?: string;
   };
 }
 
@@ -48,12 +43,6 @@ export const userDataValidation = (values: User): ErrorInterface => {
   if (!values.address.zipcode) {
     errors.address.zipcode = 'Required';
   }
-  if (!values.address.geo.lat) {
-    errors.address.geo.lat = 'Required';
-  }
-  if (!values.address.geo.lng) {
-    errors.address.geo.lng = 'Required';
-  }
   if (!values.phone) {
     errors.phone = 'Required';
   }
@@ -65,9 +54,6 @@ export const userDataValidation = (values: User): ErrorInterface => {
   }
   if (!values.company.catchPhrase) {
     errors.company.catchPhrase = 'Required';
-  }
-  if (!values.company.bs) {
-    errors.company.bs = 'Required';
   }
   return errors;
 };

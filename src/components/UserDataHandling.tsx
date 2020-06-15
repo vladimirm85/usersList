@@ -29,7 +29,7 @@ const _UserDataHandling: React.FC<_UserDataHandling> = (
   const { users, match, handleUpdateUser, handleAddUser } = props;
   let initialUserData: User = UserDefaultData;
   if (match.url !== '/add') {
-    const userId = parseInt(match.url.slice(6));
+    const userId = match.url.slice(6);
     const user = users.find((user: User) => user.id === userId);
     user && (initialUserData = user);
   }

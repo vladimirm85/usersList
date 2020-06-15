@@ -1,7 +1,6 @@
 import { put, takeEvery, call, all } from 'redux-saga/effects';
 import { history } from '../components/App';
-import API from '../api';
-import { User } from '../reducer';
+import { getUsresApi, addUserApi, deleteUserApi, updateUserApi } from '../api';
 import {
   ActionTypes,
   requestApi,
@@ -25,13 +24,11 @@ export function* watchFetchUsers() {
 export function* fetchUserAsync() {
   try {
     yield put<RequestApi>(requestApi());
-    const users = yield call(() =>
-      API.get<User[]>('').then((user) => user.data)
-    );
+    const users = yield call(() => getUsresApi());
     yield put<FetchUsers>(fetchUsers(users));
   } catch (error) {
     console.log(error);
-    yield put<RequestFailed>(requestFailed());
+    yield put<RequestFailed>(requestFailed(error));
   }
 }
 
@@ -43,12 +40,12 @@ export function* deleteUserAsync(action: DeleteUser) {
   const id = action.payload.id;
   try {
     yield put<RequestApi>(requestApi());
-    yield call(() => API.delete(`/${id}`));
+    yield call(() => deleteUserApi(id));
     history.push('/');
     yield put<DeleteUser>(deleteUser(id));
   } catch (error) {
     console.log(error);
-    yield put<RequestFailed>(requestFailed());
+    yield put<RequestFailed>(requestFailed(error));
   }
 }
 
@@ -60,12 +57,12 @@ export function* updateUserAsync(action: UpdateUser) {
   const user = action.payload.user;
   try {
     yield put<RequestApi>(requestApi());
-    const updatedUser = yield call(() => API.put(`/${user.id}`, user));
+    yield call(() => updateUserApi(user));
     history.push(`/user/${user.id}`);
-    yield put<UpdateUser>(updateUser(updatedUser.data));
+    yield put<UpdateUser>(updateUser(user));
   } catch (error) {
     console.log(error);
-    yield put<RequestFailed>(requestFailed());
+    yield put<RequestFailed>(requestFailed(error));
   }
 }
 
@@ -77,12 +74,12 @@ export function* addUserAsync(action: AddUser) {
   const user = action.payload.user;
   try {
     yield put<RequestApi>(requestApi());
-    const addedUser = yield call(() => API.post('', user));
+    const addedUser = yield call(() => addUserApi(user));
     history.push('/');
-    yield put<AddUser>(addUser(addedUser.data));
+    yield put<AddUser>(addUser(addedUser));
   } catch (error) {
     console.log(error);
-    yield put<RequestFailed>(requestFailed());
+    yield put<RequestFailed>(requestFailed(error));
   }
 }
 

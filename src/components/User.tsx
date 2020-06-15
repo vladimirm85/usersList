@@ -45,8 +45,7 @@ const _User: React.FC<UserProps> = (props: UserProps): JSX.Element => {
   const classes = useStyles();
 
   React.useEffect(() => {
-    console.log('UseruseEffect');
-    const userId = parseInt(match.url.slice(6));
+    const userId = match.url.slice(6);
     const user = users.find((user) => user.id === userId);
     user && setUser(user);
   }, [users, match.url]);
@@ -146,10 +145,6 @@ const _User: React.FC<UserProps> = (props: UserProps): JSX.Element => {
                   <TableCell align="right">
                     {user.company.catchPhrase}
                   </TableCell>
-                </TableRow>
-                <TableRow key={'userCompanyBs'}>
-                  <TableCell>Company BS</TableCell>
-                  <TableCell align="right">{user.company.bs}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>

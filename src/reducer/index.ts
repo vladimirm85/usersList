@@ -1,8 +1,8 @@
 import { combineReducers, Reducer } from 'redux';
-import { reducer, User as UserInterface } from './reducer';
+import { reducer, User as UserInterface, UsersStateInterface } from './reducer';
 
 export interface StoreInterface {
-  usersReducer: { users: UserInterface[]; isLoading: boolean };
+  usersReducer: UsersStateInterface;
 }
 
 export const reducers: Reducer<StoreInterface> = combineReducers<

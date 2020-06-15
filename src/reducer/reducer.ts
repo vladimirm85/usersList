@@ -1,7 +1,7 @@
 import { ActionTypes, Action } from '../actions';
 
 export interface User {
-  id?: number;
+  id?: string;
   name: string;
   username: string;
   email: string;
@@ -10,31 +10,31 @@ export interface User {
     suite: string;
     city: string;
     zipcode: string;
-    geo: {
-      lat: string;
-      lng: string;
-    };
   };
   phone: string;
   website: string;
   company: {
     name: string;
     catchPhrase: string;
-    bs: string;
   };
 }
 
-interface StateInterface {
+export interface UsersStateInterface {
   users: User[];
   isLoading: boolean;
+  requestError: Error;
 }
 
-const initialState: StateInterface = { users: [], isLoading: true };
+const initialState: UsersStateInterface = {
+  users: [],
+  isLoading: true,
+  requestError: new Error(),
+};
 
 export const reducer = (
   state = initialState,
   action: Action
-): StateInterface => {
+): UsersStateInterface => {
   switch (action.type) {
     case ActionTypes.requestApi:
       return {
@@ -73,6 +73,7 @@ export const reducer = (
       return {
         ...state,
         isLoading: false,
+        requestError: action.payload.requestError,
       };
     default:
       return state;

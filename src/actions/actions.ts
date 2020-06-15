@@ -11,10 +11,16 @@ export const requestApi = (): RequestApi => ({
 
 export interface RequestFailed {
   type: ActionTypes.requestFailed;
+  payload: {
+    requestError: Error;
+  };
 }
 
-export const requestFailed = (): RequestFailed => ({
+export const requestFailed = (requestError: Error): RequestFailed => ({
   type: ActionTypes.requestFailed,
+  payload: {
+    requestError,
+  },
 });
 
 export interface FetchUsers {
@@ -59,18 +65,18 @@ export const handleAddUser = (user: User) => ({
 export interface DeleteUser {
   type: ActionTypes.deleteUser;
   payload: {
-    id: number;
+    id: string;
   };
 }
 
-export const deleteUser = (id: number): DeleteUser => ({
+export const deleteUser = (id: string): DeleteUser => ({
   type: ActionTypes.deleteUser,
   payload: {
     id,
   },
 });
 
-export const handleDeleteUser = (id: number) => ({
+export const handleDeleteUser = (id: string) => ({
   type: ActionTypes.handleDeleteUser,
   payload: {
     id,
