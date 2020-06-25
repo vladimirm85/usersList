@@ -31,6 +31,11 @@ export const requestsReducer = (
         isLoading: false,
         requestError: action.payload.requestError,
       };
+    case ActionTypes.clearError:
+      return {
+        ...state,
+        requestError: new Error(),
+      };
     default:
       return state;
   }

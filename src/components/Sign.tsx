@@ -12,10 +12,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import {
   FacebookLoginButton,
   GoogleLoginButton,
@@ -86,7 +82,6 @@ const signinDataValidation = (values: SignData) => {
 
 interface MapStateToPropsType {
   authUser: AuthUser;
-  requestError: Error;
 }
 
 interface MapDispatchToPropsType {
@@ -100,16 +95,7 @@ type SignProps = RouteComponentProps &
 
 const _Sign: React.FC<SignProps> = (props: SignProps): JSX.Element => {
   const classes = useStyles();
-  const {
-    match,
-    authUser,
-    requestError,
-    signUpAuthUser,
-    signInAuthUser,
-  } = props;
-
-  const [open, setOpen] = React.useState(true);
-
+  const { match, authUser, signUpAuthUser, signInAuthUser } = props;
   const isSigningIn = match.url.slice(1) === 'signin' ? true : false;
   const showSocislButton = isSigningIn
     ? socialButtonsStyle.show
@@ -121,28 +107,9 @@ const _Sign: React.FC<SignProps> = (props: SignProps): JSX.Element => {
       ? signInAuthUser({ email: value.email, password: value.password })
       : signUpAuthUser({ email: value.email, password: value.password });
   };
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <Fragment>
-      <Dialog
-        open={!!requestError.message}
-        onClose={handleClose}
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {requestError.message}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
       {authUser.id ? (
         <Redirect to="/" />
       ) : (
@@ -216,7 +183,6 @@ const mapStateToProps = ({
 }: StoreInterface): MapStateToPropsType => {
   return {
     authUser: authUserReducer.authUser,
-    requestError: requestsReducer.requestError,
   };
 };
 

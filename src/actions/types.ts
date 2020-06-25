@@ -2,9 +2,10 @@ import {
   RequestApi,
   RequestSuccess,
   RequestFailed,
-  AddUser,
-  FetchUsers,
+  ClearError,
   FetchAuthUser,
+  FetchUsers,
+  AddUser,
   DeleteUser,
   UpdateUser,
 } from './actions';
@@ -13,6 +14,7 @@ export enum ActionTypes {
   requestApi = 'REQUEST_API',
   requestSuccess = 'REQUEST_SUCCESS',
   requestFailed = 'REQUEST_FAILED',
+  clearError = 'CLEAR_ERROR',
   fetchAuthUser = 'FETCH_AUTH_USER',
   signUpAuthUser = 'SIGN_UP_AUTH_USER',
   signInAuthUser = 'SIGN_IN_AUTH_USER',
@@ -30,9 +32,10 @@ export enum ActionTypes {
 export type Action =
   | RequestApi
   | RequestSuccess
-  | FetchUsers
-  | FetchAuthUser
-  | AddUser
   | RequestFailed
+  | ClearError
+  | FetchAuthUser
+  | FetchUsers
+  | AddUser
   | DeleteUser
   | UpdateUser;

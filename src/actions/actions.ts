@@ -31,6 +31,14 @@ export const requestFailed = (requestError: Error): RequestFailed => ({
   },
 });
 
+export interface ClearError {
+  type: ActionTypes.clearError;
+}
+
+export const clearError = (): ClearError => ({
+  type: ActionTypes.clearError,
+});
+
 export interface FetchAuthUser {
   type: ActionTypes.fetchAuthUser;
   payload: {

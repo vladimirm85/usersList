@@ -6,6 +6,7 @@ import { Grid, Backdrop, CircularProgress } from '@material-ui/core';
 import { Header } from './Header';
 import { User, StoreInterface } from '../reducer';
 import { createBrowserHistory } from 'history';
+import { Alerts } from './Alerts';
 
 export const history = createBrowserHistory();
 
@@ -32,6 +33,7 @@ const _App: React.FC<AppProps> = (props: AppProps): JSX.Element => {
       <Grid container direction="column">
         <Grid item>
           <Header />
+          <Alerts />
         </Grid>
         <Grid item container>
           <Grid item xs={false} sm={1} />
