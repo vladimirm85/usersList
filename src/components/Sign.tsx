@@ -49,12 +49,6 @@ const socialButtonsStyle = {
     margin: '10px 0px',
     width: '100%',
   },
-  hide: {
-    display: 'none',
-  },
-  show: {
-    display: 'block',
-  },
 };
 
 interface ErrorInterface {
@@ -97,15 +91,18 @@ const _Sign: React.FC<SignProps> = (props: SignProps): JSX.Element => {
   const classes = useStyles();
   const { match, authUser, signUpAuthUser, signInAuthUser } = props;
   const isSigningIn = match.url.slice(1) === 'signin' ? true : false;
-  const showSocislButton = isSigningIn
-    ? socialButtonsStyle.show
-    : socialButtonsStyle.hide;
   const SingText = isSigningIn ? 'Sign In' : 'Sign Up';
 
   const onSubmit = (value: SignData) => {
     isSigningIn
-      ? signInAuthUser({ email: value.email, password: value.password })
-      : signUpAuthUser({ email: value.email, password: value.password });
+      ? signInAuthUser({
+          email: value.email,
+          password: value.password,
+        })
+      : signUpAuthUser({
+          email: value.email,
+          password: value.password,
+        });
   };
 
   return (
@@ -156,17 +153,19 @@ const _Sign: React.FC<SignProps> = (props: SignProps): JSX.Element => {
                   >
                     {SingText}
                   </Button>
-                  <div style={showSocislButton}>
-                    <FacebookLoginButton style={socialButtonsStyle.fb} />
-                    <GoogleLoginButton style={socialButtonsStyle.ggl} />
-                    <Grid container>
-                      <Grid item>
-                        <Link href="/signup" variant="body2">
-                          {"Don't have an account? Sign Up"}
-                        </Link>
+                  {isSigningIn && (
+                    <div>
+                      <FacebookLoginButton style={socialButtonsStyle.fb} />
+                      <GoogleLoginButton style={socialButtonsStyle.ggl} />
+                      <Grid container>
+                        <Grid item>
+                          <Link href="/signup" variant="body2">
+                            {"Don't have an account? Sign Up"}
+                          </Link>
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  </div>
+                    </div>
+                  )}
                 </form>
               )}
             />

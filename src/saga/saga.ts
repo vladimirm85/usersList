@@ -49,8 +49,9 @@ function* watchFetchAuthUser() {
     while (true) {
       const authUser = yield take(channel);
       yield put<FetchAuthUser>(fetchAuthUser(authUser));
-      authUser.id && (yield fork(fetchUsersAsync));
-      yield put<RequestSuccess>(requestSuccess());
+      authUser.id
+        ? yield fork(fetchUsersAsync)
+        : yield put<RequestSuccess>(requestSuccess());
     }
   } catch (error) {
     yield put<RequestFailed>(requestFailed(error));
