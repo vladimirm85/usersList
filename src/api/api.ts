@@ -18,7 +18,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const dataBase = firebase.firestore();
-
+export const FBprovider = new firebase.auth.FacebookAuthProvider();
+export const Gprovider = new firebase.auth.GoogleAuthProvider();
 const usersCollection = () => dataBase.collection('users');
 const userDoc = (id: string) => usersCollection().doc(id);
 const userMaker = (
@@ -50,14 +51,6 @@ export const deleteUserApi = (id: string) => userDoc(id).delete();
 export const updateUserApi = (user: User) =>
   user.id && userDoc(user.id).update(user);
 
-export const signUpAuthUserApi = (email: string, password: string) =>
-  firebase.auth().createUserWithEmailAndPassword(email, password);
-
-export const signInAuthUserApi = (email: string, password: string) =>
-  firebase.auth().signInWithEmailAndPassword(email, password);
-
-export const signOutAuthUserApi = () => firebase.auth().signOut();
-
 interface AuthUser {
   displayName: string | null;
   photoUrl: string | null;
@@ -80,3 +73,18 @@ export const fetchAuthUserApi = (emitter: (arg0: AuthUser) => void) =>
       });
     }
   });
+
+export const signUpAuthUserApi = (email: string, password: string) =>
+  firebase.auth().createUserWithEmailAndPassword(email, password);
+
+export const signInWithEmailAndPasswordApi = (
+  email: string,
+  password: string
+) => firebase.auth().signInWithEmailAndPassword(email, password);
+
+export type Provider = firebase.auth.AuthProvider;
+
+export const signInWithPopupApi = (provider: Provider) =>
+  firebase.auth().signInWithPopup(provider);
+
+export const signOutAuthUserApi = () => firebase.auth().signOut();

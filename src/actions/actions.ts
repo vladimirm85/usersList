@@ -1,4 +1,5 @@
 import { ActionTypes } from './types';
+import { Provider } from '../api';
 import { User, AuthUser } from '../reducer';
 
 export interface RequestApi {
@@ -58,17 +59,33 @@ export interface SignWithEmailAndPassword {
   };
 }
 
-export const signUpAuthUser = (signData: SignData) => ({
+export const signUpAuthUser = (
+  signData: SignData
+): SignWithEmailAndPassword => ({
   type: ActionTypes.signUpAuthUser,
   payload: {
     signData,
   },
 });
 
-export const signInAuthUser = (signData: SignData) => ({
-  type: ActionTypes.signInAuthUser,
+export const signInWithEmailAndPassword = (signData: SignData) => ({
+  type: ActionTypes.signInWithEmailAndPassword,
   payload: {
     signData,
+  },
+});
+
+export interface SignWithPopup {
+  type: ActionTypes.signInWithPopup;
+  payload: {
+    provider: Provider;
+  };
+}
+
+export const signInWithPopup = (provider: Provider) => ({
+  type: ActionTypes.signInWithPopup,
+  payload: {
+    provider,
   },
 });
 

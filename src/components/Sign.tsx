@@ -17,8 +17,13 @@ import {
   GoogleLoginButton,
 } from 'react-social-login-buttons';
 import { Form } from 'react-final-form';
-import { signInAuthUser, signUpAuthUser } from '../actions';
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signUpAuthUser,
+} from '../actions';
 import { AuthUser, StoreInterface } from '../reducer';
+import { FBprovider, Gprovider } from '../api';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -80,7 +85,8 @@ interface MapStateToPropsType {
 
 interface MapDispatchToPropsType {
   signUpAuthUser: typeof signUpAuthUser;
-  signInAuthUser: typeof signInAuthUser;
+  signInWithEmailAndPassword: typeof signInWithEmailAndPassword;
+  signInWithPopup: typeof signInWithPopup;
 }
 
 type SignProps = RouteComponentProps &
@@ -89,13 +95,19 @@ type SignProps = RouteComponentProps &
 
 const _Sign: React.FC<SignProps> = (props: SignProps): JSX.Element => {
   const classes = useStyles();
-  const { match, authUser, signUpAuthUser, signInAuthUser } = props;
+  const {
+    match,
+    authUser,
+    signUpAuthUser,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+  } = props;
   const isSigningIn = match.url.slice(1) === 'signin' ? true : false;
   const SingText = isSigningIn ? 'Sign In' : 'Sign Up';
 
   const onSubmit = (value: SignData) => {
     isSigningIn
-      ? signInAuthUser({
+      ? signInWithEmailAndPassword({
           email: value.email,
           password: value.password,
         })
@@ -155,8 +167,14 @@ const _Sign: React.FC<SignProps> = (props: SignProps): JSX.Element => {
                   </Button>
                   {isSigningIn && (
                     <div>
-                      <FacebookLoginButton style={socialButtonsStyle.fb} />
-                      <GoogleLoginButton style={socialButtonsStyle.ggl} />
+                      <FacebookLoginButton
+                        style={socialButtonsStyle.fb}
+                        onClick={() => signInWithPopup(FBprovider)}
+                      />
+                      <GoogleLoginButton
+                        style={socialButtonsStyle.ggl}
+                        onClick={() => signInWithPopup(Gprovider)}
+                      />
                       <Grid container>
                         <Grid item>
                           <Link href="/signup" variant="body2">
@@ -178,7 +196,6 @@ const _Sign: React.FC<SignProps> = (props: SignProps): JSX.Element => {
 
 const mapStateToProps = ({
   authUserReducer,
-  requestsReducer,
 }: StoreInterface): MapStateToPropsType => {
   return {
     authUser: authUserReducer.authUser,
@@ -186,6 +203,9 @@ const mapStateToProps = ({
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType =>
-  bindActionCreators({ signUpAuthUser, signInAuthUser }, dispatch);
+  bindActionCreators(
+    { signUpAuthUser, signInWithEmailAndPassword, signInWithPopup },
+    dispatch
+  );
 
 export const Sign = connect(mapStateToProps, mapDispatchToProps)(_Sign);

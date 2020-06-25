@@ -12,7 +12,8 @@ import { history } from '../components/App';
 import {
   fetchAuthUserApi,
   signUpAuthUserApi,
-  signInAuthUserApi,
+  signInWithEmailAndPasswordApi,
+  signInWithPopupApi,
   signOutAuthUserApi,
   fetchUsresApi,
   addUserApi,
@@ -30,6 +31,7 @@ import {
   fetchAuthUser,
   FetchAuthUser,
   SignWithEmailAndPassword,
+  SignWithPopup,
   fetchUsers,
   FetchUsers,
   addUser,
@@ -73,14 +75,34 @@ function* signUpAuthUserAsync(action: SignWithEmailAndPassword) {
   }
 }
 
-function* watchSignInAuthUser() {
-  yield takeLatest(ActionTypes.signInAuthUser, signInAuthUserAsync);
+function* watchSignInWithEmailAndPassword() {
+  yield takeLatest(
+    ActionTypes.signInWithEmailAndPassword,
+    signInWithEmailAndPasswordAsync
+  );
 }
 
-function* signInAuthUserAsync(action: SignWithEmailAndPassword) {
+function* signInWithEmailAndPasswordAsync(action: SignWithEmailAndPassword) {
   const { signData } = action.payload;
   try {
-    yield call(signInAuthUserApi, signData.email, signData.password);
+    yield call(
+      signInWithEmailAndPasswordApi,
+      signData.email,
+      signData.password
+    );
+  } catch (error) {
+    yield put<RequestFailed>(requestFailed(error));
+  }
+}
+
+function* watchSignInWithPopup() {
+  yield takeLatest(ActionTypes.signInWithPopup, signInWithPopupAsync);
+}
+
+function* signInWithPopupAsync(action: SignWithPopup) {
+  const { provider } = action.payload;
+  try {
+    yield call(signInWithPopupApi, provider);
   } catch (error) {
     yield put<RequestFailed>(requestFailed(error));
   }
@@ -167,7 +189,8 @@ export function* rootSaga() {
   yield all([
     watchFetchAuthUser(),
     watchSignUpAuthUser(),
-    watchSignInAuthUser(),
+    watchSignInWithEmailAndPassword(),
+    watchSignInWithPopup(),
     watchSignOutAuthUser(),
     watchAddUser(),
     watchDeleteUser(),
