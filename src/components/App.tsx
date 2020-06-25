@@ -2,12 +2,9 @@ import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { routesProperties } from '../routes';
 import { connect } from 'react-redux';
-import { Dispatch, bindActionCreators } from 'redux';
 import { Grid, Backdrop, CircularProgress } from '@material-ui/core';
 import { Header } from './Header';
 import { User, StoreInterface } from '../reducer';
-import { handleFetchUsers } from '../actions';
-
 import { createBrowserHistory } from 'history';
 
 export const history = createBrowserHistory();
@@ -26,20 +23,10 @@ interface MapStateToPropsType {
   isLoading: boolean;
 }
 
-interface MapDispatchToPropsType {
-  handleFetchUsers: typeof handleFetchUsers;
-}
-
-type AppProps = MapStateToPropsType & MapDispatchToPropsType;
+type AppProps = MapStateToPropsType;
 
 const _App: React.FC<AppProps> = (props: AppProps): JSX.Element => {
-  const { users, isLoading, handleFetchUsers } = props;
-  React.useEffect(() => {
-    if (!users.length) {
-      handleFetchUsers();
-    }
-  }, [handleFetchUsers, users]);
-
+  const { isLoading } = props;
   return (
     <Router history={history}>
       <Grid container direction="column">
@@ -63,14 +50,12 @@ const _App: React.FC<AppProps> = (props: AppProps): JSX.Element => {
 
 const mapStateToProps = ({
   usersReducer,
+  requestsReducer,
 }: StoreInterface): MapStateToPropsType => {
   return {
     users: usersReducer.users,
-    isLoading: usersReducer.isLoading,
+    isLoading: requestsReducer.isLoading,
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType =>
-  bindActionCreators({ handleFetchUsers }, dispatch);
-
-export const App = connect(mapStateToProps, mapDispatchToProps)(_App);
+export const App = connect(mapStateToProps)(_App);

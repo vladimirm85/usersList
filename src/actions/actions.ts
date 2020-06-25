@@ -1,5 +1,5 @@
 import { ActionTypes } from './types';
-import { User } from '../reducer';
+import { User, AuthUser } from '../reducer';
 
 export interface RequestApi {
   type: ActionTypes.requestApi;
@@ -7,6 +7,14 @@ export interface RequestApi {
 
 export const requestApi = (): RequestApi => ({
   type: ActionTypes.requestApi,
+});
+
+export interface RequestSuccess {
+  type: ActionTypes.requestSuccess;
+}
+
+export const requestSuccess = (): RequestSuccess => ({
+  type: ActionTypes.requestSuccess,
 });
 
 export interface RequestFailed {
@@ -20,6 +28,50 @@ export const requestFailed = (requestError: Error): RequestFailed => ({
   type: ActionTypes.requestFailed,
   payload: {
     requestError,
+  },
+});
+
+export interface FetchAuthUser {
+  type: ActionTypes.fetchAuthUser;
+  payload: {
+    authUser: AuthUser;
+  };
+}
+
+export interface SignData {
+  email: string;
+  password: string;
+}
+
+export interface SignWithEmailAndPassword {
+  type: ActionTypes.signUpAuthUser;
+  payload: {
+    signData: SignData;
+  };
+}
+
+export const signUpAuthUser = (signData: SignData) => ({
+  type: ActionTypes.signUpAuthUser,
+  payload: {
+    signData,
+  },
+});
+
+export const signInAuthUser = (signData: SignData) => ({
+  type: ActionTypes.signInAuthUser,
+  payload: {
+    signData,
+  },
+});
+
+export const signOutAuthUser = () => ({
+  type: ActionTypes.signOutAuthUser,
+});
+
+export const fetchAuthUser = (authUser: AuthUser): FetchAuthUser => ({
+  type: ActionTypes.fetchAuthUser,
+  payload: {
+    authUser,
   },
 });
 

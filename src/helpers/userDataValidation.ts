@@ -18,8 +18,8 @@ interface ErrorInterface {
   };
 }
 
-export const userDataValidation = (values: User): ErrorInterface => {
-  const errors: any = {};
+export const userDataValidation = (values: User) => {
+  const errors: ErrorInterface = {};
   if (!values.name) {
     errors.name = 'Required';
   }
@@ -32,16 +32,16 @@ export const userDataValidation = (values: User): ErrorInterface => {
     errors.email = 'Invalid email address';
   }
   if (!values.address.street) {
-    errors.address.street = 'Required';
+    errors.address && (errors.address.street = 'Required');
   }
   if (!values.address.suite) {
-    errors.address.suite = 'Required';
+    errors.address && (errors.address.suite = 'Required');
   }
   if (!values.address.city) {
-    errors.address.city = 'Required';
+    errors.address && (errors.address.city = 'Required');
   }
   if (!values.address.zipcode) {
-    errors.address.zipcode = 'Required';
+    errors.address && (errors.address.zipcode = 'Required');
   }
   if (!values.phone) {
     errors.phone = 'Required';
@@ -50,10 +50,10 @@ export const userDataValidation = (values: User): ErrorInterface => {
     errors.website = 'Required';
   }
   if (!values.company.name) {
-    errors.company.name = 'Required';
+    errors.company && (errors.company.name = 'Required');
   }
   if (!values.company.catchPhrase) {
-    errors.company.catchPhrase = 'Required';
+    errors.company && (errors.company.catchPhrase = 'Required');
   }
   return errors;
 };

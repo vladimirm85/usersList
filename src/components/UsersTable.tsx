@@ -63,20 +63,17 @@ const boxProps = {
 
 export const UsersTable = (props: UsersTableProps) => {
   const { users, handleDeleteUser } = props;
-  const [filteredUsers, setFfilteredUsers] = React.useState(users);
   const classes = useStyles();
   const history = useHistory();
 
-  const usersFilter = (filter: string): void => {
-    const filteredUsers = users.filter(
-      (user) =>
-        user.name.toLowerCase().includes(filter) ||
-        user.username.toLowerCase().includes(filter) ||
-        user.email.toLowerCase().includes(filter) ||
-        user.phone.toLowerCase().includes(filter)
-    );
-    setFfilteredUsers(filteredUsers);
-  };
+  const [filter, setFfilter] = React.useState('');
+  const filteredUsers = users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(filter) ||
+      user.username.toLowerCase().includes(filter) ||
+      user.email.toLowerCase().includes(filter) ||
+      user.phone.toLowerCase().includes(filter)
+  );
 
   return (
     <React.Fragment>
@@ -89,7 +86,7 @@ export const UsersTable = (props: UsersTableProps) => {
             className={classes.input}
             placeholder="Search…"
             onChange={(e) => {
-              usersFilter(e.target.value.toLowerCase());
+              setFfilter(e.target.value.toLowerCase());
             }}
           />
         </Box>

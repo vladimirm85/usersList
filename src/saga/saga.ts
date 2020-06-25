@@ -1,12 +1,35 @@
-import { put, takeEvery, call, all } from 'redux-saga/effects';
+import {
+  put,
+  takeEvery,
+  takeLatest,
+  call,
+  fork,
+  all,
+  take,
+} from 'redux-saga/effects';
+import { eventChannel } from 'redux-saga';
 import { history } from '../components/App';
-import { getUsresApi, addUserApi, deleteUserApi, updateUserApi } from '../api';
+import {
+  fetchAuthUserApi,
+  signUpAuthUserApi,
+  signInAuthUserApi,
+  signOutAuthUserApi,
+  fetchUsresApi,
+  addUserApi,
+  deleteUserApi,
+  updateUserApi,
+} from '../api';
 import {
   ActionTypes,
   requestApi,
   RequestApi,
+  requestSuccess,
+  RequestSuccess,
   requestFailed,
   RequestFailed,
+  fetchAuthUser,
+  FetchAuthUser,
+  SignWithEmailAndPassword,
   fetchUsers,
   FetchUsers,
   addUser,
@@ -17,66 +40,122 @@ import {
   UpdateUser,
 } from '../actions';
 
-export function* watchFetchUsers() {
-  yield takeEvery(ActionTypes.handleFetchUsers, fetchUserAsync);
-}
+const getAuthChannel = () =>
+  eventChannel((emitter) => fetchAuthUserApi(emitter));
 
-export function* fetchUserAsync() {
+function* watchFetchAuthUser() {
+  const channel = yield call(getAuthChannel);
   try {
-    yield put<RequestApi>(requestApi());
-    const users = yield call(() => getUsresApi());
-    yield put<FetchUsers>(fetchUsers(users));
+    while (true) {
+      const authUser = yield take(channel);
+      yield put<FetchAuthUser>(fetchAuthUser(authUser));
+      authUser.id && (yield fork(fetchUsersAsync));
+      yield put<RequestSuccess>(requestSuccess());
+    }
   } catch (error) {
-    console.log(error);
     yield put<RequestFailed>(requestFailed(error));
   }
 }
 
-export function* watchDeleteUser() {
+function* watchSignUpAuthUser() {
+  yield takeLatest(ActionTypes.signUpAuthUser, signUpAuthUserAsync);
+}
+
+function* signUpAuthUserAsync(action: SignWithEmailAndPassword) {
+  const { signData } = action.payload;
+  try {
+    yield put<RequestApi>(requestApi());
+    yield call(signUpAuthUserApi, signData.email, signData.password);
+    yield put<RequestSuccess>(requestSuccess());
+  } catch (error) {
+    yield put<RequestFailed>(requestFailed(error));
+  }
+}
+
+function* watchSignInAuthUser() {
+  yield takeLatest(ActionTypes.signInAuthUser, signInAuthUserAsync);
+}
+
+function* signInAuthUserAsync(action: SignWithEmailAndPassword) {
+  const { signData } = action.payload;
+  try {
+    yield call(signInAuthUserApi, signData.email, signData.password);
+  } catch (error) {
+    yield put<RequestFailed>(requestFailed(error));
+  }
+}
+
+function* watchSignOutAuthUser() {
+  yield takeLatest(ActionTypes.signOutAuthUser, signOutAuthUserAsync);
+}
+
+function* signOutAuthUserAsync() {
+  try {
+    yield put<RequestApi>(requestApi());
+    yield call(signOutAuthUserApi);
+    yield put<RequestSuccess>(requestSuccess());
+  } catch (error) {
+    yield put<RequestFailed>(requestFailed(error));
+  }
+}
+
+function* fetchUsersAsync() {
+  try {
+    yield put<RequestApi>(requestApi());
+    const users = yield call(fetchUsresApi);
+    yield put<FetchUsers>(fetchUsers(users));
+    yield put<RequestSuccess>(requestSuccess());
+  } catch (error) {
+    yield put<RequestFailed>(requestFailed(error));
+  }
+}
+
+function* watchDeleteUser() {
   yield takeEvery(ActionTypes.handleDeleteUser, deleteUserAsync);
 }
 
-export function* deleteUserAsync(action: DeleteUser) {
-  const id = action.payload.id;
+function* deleteUserAsync(action: DeleteUser) {
+  const { id } = action.payload;
   try {
     yield put<RequestApi>(requestApi());
-    yield call(() => deleteUserApi(id));
+    yield call(deleteUserApi, id);
     history.push('/');
     yield put<DeleteUser>(deleteUser(id));
+    yield put<RequestSuccess>(requestSuccess());
   } catch (error) {
-    console.log(error);
     yield put<RequestFailed>(requestFailed(error));
   }
 }
 
-export function* watchUpdateUser() {
+function* watchUpdateUser() {
   yield takeEvery(ActionTypes.handleUpdateUser, updateUserAsync);
 }
 
-export function* updateUserAsync(action: UpdateUser) {
-  const user = action.payload.user;
+function* updateUserAsync(action: UpdateUser) {
+  const { user } = action.payload;
   try {
     yield put<RequestApi>(requestApi());
-    yield call(() => updateUserApi(user));
+    yield call(updateUserApi, user);
     history.push(`/user/${user.id}`);
     yield put<UpdateUser>(updateUser(user));
+    yield put<RequestSuccess>(requestSuccess());
   } catch (error) {
-    console.log(error);
     yield put<RequestFailed>(requestFailed(error));
   }
 }
 
-export function* watchAddUser() {
+function* watchAddUser() {
   yield takeEvery(ActionTypes.handleAddUser, addUserAsync);
 }
 
-export function* addUserAsync(action: AddUser) {
-  const user = action.payload.user;
+function* addUserAsync(action: AddUser) {
+  const { user } = action.payload;
   try {
     yield put<RequestApi>(requestApi());
-    const addedUser = yield call(() => addUserApi(user));
+    const addedUser = yield call(addUserApi, user);
     history.push('/');
     yield put<AddUser>(addUser(addedUser));
+    yield put<RequestSuccess>(requestSuccess());
   } catch (error) {
     console.log(error);
     yield put<RequestFailed>(requestFailed(error));
@@ -85,7 +164,10 @@ export function* addUserAsync(action: AddUser) {
 
 export function* rootSaga() {
   yield all([
-    watchFetchUsers(),
+    watchFetchAuthUser(),
+    watchSignUpAuthUser(),
+    watchSignInAuthUser(),
+    watchSignOutAuthUser(),
     watchAddUser(),
     watchDeleteUser(),
     watchUpdateUser(),
