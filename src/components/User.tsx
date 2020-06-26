@@ -15,7 +15,7 @@ import {
   Container,
 } from '@material-ui/core';
 import { User as UserInterface, StoreInterface } from '../reducer';
-import { handleDeleteUser } from '../actions';
+import { handleDeleteUser, openDialog } from '../actions';
 
 const useStyles = makeStyles({
   table: {
@@ -33,6 +33,7 @@ interface MapStateToPropsType {
 
 interface MapDispatchToPropsType {
   handleDeleteUser: typeof handleDeleteUser;
+  openDialog: typeof openDialog;
 }
 
 type UserProps = MapStateToPropsType &
@@ -40,7 +41,7 @@ type UserProps = MapStateToPropsType &
   RouteComponentProps;
 
 const _User: React.FC<UserProps> = (props: UserProps): JSX.Element => {
-  const { users, handleDeleteUser, match, history } = props;
+  const { users, handleDeleteUser, openDialog, match, history } = props;
   const [user, setUser] = React.useState<UserInterface | undefined>(undefined);
   const classes = useStyles();
 
@@ -78,7 +79,14 @@ const _User: React.FC<UserProps> = (props: UserProps): JSX.Element => {
                   <TableCell align="right" colSpan={2}>
                     <Delete
                       className={classes.cursorPointer}
-                      onClick={() => user.id && handleDeleteUser(user.id)}
+                      onClick={() =>
+                        user.id &&
+                        openDialog(
+                          `Delete user ${user.name}?`,
+                          handleDeleteUser,
+                          user.id
+                        )
+                      }
                     />
                   </TableCell>
                 </TableRow>
@@ -164,6 +172,6 @@ const mapStateToProps = ({
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType =>
-  bindActionCreators({ handleDeleteUser }, dispatch);
+  bindActionCreators({ handleDeleteUser, openDialog }, dispatch);
 
 export const User = connect(mapStateToProps, mapDispatchToProps)(_User);

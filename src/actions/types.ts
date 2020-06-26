@@ -8,6 +8,8 @@ import {
   AddUser,
   DeleteUser,
   UpdateUser,
+  OpenDialog,
+  CloseDialog,
 } from './actions';
 
 export enum ActionTypes {
@@ -28,6 +30,8 @@ export enum ActionTypes {
   handleDeleteUser = 'HANDLE_DELETE_USER',
   updateUser = 'UPDATE_USER',
   handleUpdateUser = 'HANDLE_UPDATE_USER',
+  openDialog = 'OPEN_DIALOG',
+  closeDialog = 'CLOSE_DIALOG',
 }
 
 export type Action =
@@ -39,4 +43,6 @@ export type Action =
   | FetchUsers
   | AddUser
   | DeleteUser
-  | UpdateUser;
+  | UpdateUser
+  | OpenDialog
+  | CloseDialog;

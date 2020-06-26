@@ -17,9 +17,11 @@ interface MapDispatchToPropsType {
   clearError: typeof clearError;
 }
 
-type AlertsProps = MapStateToPropsType & MapDispatchToPropsType;
+type RequestsAlertsProps = MapStateToPropsType & MapDispatchToPropsType;
 
-const _Alerts: React.FC<AlertsProps> = (props: AlertsProps): JSX.Element => {
+const _RequestsAlerts: React.FC<RequestsAlertsProps> = (
+  props: RequestsAlertsProps
+): JSX.Element => {
   const { requestError, clearError } = props;
   const handleClose = () => {
     clearError();
@@ -56,4 +58,7 @@ const mapStateToProps = ({
 const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType =>
   bindActionCreators({ clearError }, dispatch);
 
-export const Alerts = connect(mapStateToProps, mapDispatchToProps)(_Alerts);
+export const RequestsAlerts = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(_RequestsAlerts);

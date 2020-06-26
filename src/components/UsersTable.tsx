@@ -2,8 +2,6 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Delete, Edit, Info, Search } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { User } from '../reducer';
-import { handleDeleteUser } from '../actions';
 import {
   InputBase,
   Box,
@@ -16,6 +14,8 @@ import {
   TableRow,
   Paper,
 } from '@material-ui/core';
+import { handleDeleteUser, openDialog } from '../actions';
+import { User } from '../reducer';
 
 const useStyles = makeStyles({
   actionIcons: {
@@ -54,6 +54,7 @@ const useStyles = makeStyles({
 interface UsersTableProps {
   users: User[];
   handleDeleteUser: typeof handleDeleteUser;
+  openDialog: typeof openDialog;
 }
 
 const boxProps = {
@@ -68,7 +69,7 @@ const boxProps = {
 };
 
 export const UsersTable = (props: UsersTableProps) => {
-  const { users, handleDeleteUser } = props;
+  const { users, handleDeleteUser, openDialog } = props;
   const classes = useStyles();
   const history = useHistory();
 
@@ -134,7 +135,14 @@ export const UsersTable = (props: UsersTableProps) => {
                     />
                     <Delete
                       className={classes.cursorPointer}
-                      onClick={() => user.id && handleDeleteUser(user.id)}
+                      onClick={() =>
+                        user.id &&
+                        openDialog(
+                          `Delete user ${user.name}?`,
+                          handleDeleteUser,
+                          user.id
+                        )
+                      }
                     />
                   </div>
                 </TableCell>

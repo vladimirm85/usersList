@@ -89,11 +89,13 @@ interface MapDispatchToPropsType {
   signInWithPopup: typeof signInWithPopup;
 }
 
-type SignProps = RouteComponentProps &
+type AuthUserSignProps = RouteComponentProps &
   MapStateToPropsType &
   MapDispatchToPropsType;
 
-const _Sign: React.FC<SignProps> = (props: SignProps): JSX.Element => {
+const _AuthUserSign: React.FC<AuthUserSignProps> = (
+  props: AuthUserSignProps
+): JSX.Element => {
   const classes = useStyles();
   const {
     match,
@@ -208,4 +210,7 @@ const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType =>
     dispatch
   );
 
-export const Sign = connect(mapStateToProps, mapDispatchToProps)(_Sign);
+export const AuthUserSign = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(_AuthUserSign);

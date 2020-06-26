@@ -40,6 +40,8 @@ import {
   DeleteUser,
   updateUser,
   UpdateUser,
+  closeDialog,
+  CloseDialog,
 } from '../actions';
 
 const getAuthChannel = () =>
@@ -146,6 +148,7 @@ function* deleteUserAsync(action: DeleteUser) {
     yield call(deleteUserApi, id);
     history.push('/');
     yield put<DeleteUser>(deleteUser(id));
+    yield put<CloseDialog>(closeDialog());
     yield put<RequestSuccess>(requestSuccess());
   } catch (error) {
     yield put<RequestFailed>(requestFailed(error));

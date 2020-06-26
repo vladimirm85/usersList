@@ -180,3 +180,33 @@ export const handleUpdateUser = (user: User) => ({
     user,
   },
 });
+
+export interface OpenDialog {
+  type: ActionTypes.openDialog;
+  payload: {
+    message: string;
+    callback: Function;
+    args?: any;
+  };
+}
+
+export const openDialog = (
+  message: string,
+  callback: Function,
+  args?: any
+): OpenDialog => ({
+  type: ActionTypes.openDialog,
+  payload: {
+    message,
+    callback,
+    args,
+  },
+});
+
+export interface CloseDialog {
+  type: ActionTypes.closeDialog;
+}
+
+export const closeDialog = (): CloseDialog => ({
+  type: ActionTypes.closeDialog,
+});

@@ -2,7 +2,7 @@ import { Home } from '../components/Home';
 import { P404 } from '../components/404';
 import { User } from '../components/User';
 import { UserDataHandling } from '../components/UserDataHandling';
-import { Sign } from '../components/Sign';
+import { AuthUserSign } from '../components/AuthUserSign';
 
 export const routesProperties = [
   {
@@ -32,13 +32,13 @@ export const routesProperties = [
   {
     name: 'signup',
     url: '/signup',
-    component: Sign,
+    component: AuthUserSign,
     exact: true,
   },
   {
     name: 'signin',
     url: '/signin',
-    component: Sign,
+    component: AuthUserSign,
     exact: true,
   },
   {
