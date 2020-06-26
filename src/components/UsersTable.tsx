@@ -1,10 +1,13 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { InputBase, Box } from '@material-ui/core';
+import { Delete, Edit, Info, Search } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { User } from '../reducer';
 import { handleDeleteUser } from '../actions';
 import {
+  InputBase,
+  Box,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -13,7 +16,6 @@ import {
   TableRow,
   Paper,
 } from '@material-ui/core';
-import { Delete, Edit, Info, Search } from '@material-ui/icons';
 
 const useStyles = makeStyles({
   actionIcons: {
@@ -22,6 +24,10 @@ const useStyles = makeStyles({
   },
   cursorPointer: {
     cursor: 'pointer',
+  },
+  addUserButton: {
+    display: 'flex',
+    alignItems: 'center',
   },
   search: {
     position: 'relative',
@@ -77,19 +83,28 @@ export const UsersTable = (props: UsersTableProps) => {
 
   return (
     <React.Fragment>
-      <div className={classes.search}>
-        <div className={classes.searchIcon}>
-          <Search />
+      <div className={classes.addUserButton}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => history.push('/add')}
+        >
+          Add User
+        </Button>
+        <div className={classes.search}>
+          <div className={classes.searchIcon}>
+            <Search />
+          </div>
+          <Box {...boxProps}>
+            <InputBase
+              className={classes.input}
+              placeholder="Search…"
+              onChange={(e) => {
+                setFfilter(e.target.value.toLowerCase());
+              }}
+            />
+          </Box>
         </div>
-        <Box {...boxProps}>
-          <InputBase
-            className={classes.input}
-            placeholder="Search…"
-            onChange={(e) => {
-              setFfilter(e.target.value.toLowerCase());
-            }}
-          />
-        </Box>
       </div>
       <TableContainer component={Paper}>
         <Table aria-label="simple table">

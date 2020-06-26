@@ -102,7 +102,9 @@ function* watchSignInWithPopup() {
 function* signInWithPopupAsync(action: SignWithPopup) {
   const { provider } = action.payload;
   try {
+    yield put<RequestApi>(requestApi());
     yield call(signInWithPopupApi, provider);
+    yield put<RequestSuccess>(requestSuccess());
   } catch (error) {
     yield put<RequestFailed>(requestFailed(error));
   }
