@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps, Redirect } from 'react-router-dom';
+import { RouteComponentProps, Redirect, Link } from 'react-router-dom';
 import { Dispatch, bindActionCreators } from 'redux';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { TextField } from 'mui-rff';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -179,8 +178,8 @@ const _AuthUserSign: React.FC<AuthUserSignProps> = (
                       />
                       <Grid container>
                         <Grid item>
-                          <Link href="/signup" variant="body2">
-                            {"Don't have an account? Sign Up"}
+                          <Link to="/signup">
+                            Don't have an account? Sign Up
                           </Link>
                         </Grid>
                       </Grid>
